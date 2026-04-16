@@ -5,7 +5,7 @@
 </head>
 <body>
     <p>Bem-vindo</p>
-    <form method = "HEAD" action =" {{ route('usuario.store')}}">
+    <form method = "POST" action =" {{ route('usuario.store')}}">
     @csrf
     <p>nome <p>
     <input type = "text" name ="nome" >
@@ -15,4 +15,4 @@
     <input type = "text" password = "password">
     <button type = "submit" > Salvar</button> 
 </body>           
-</html>  
+</html> 

@@ -9,6 +9,6 @@ class TaskViewController extends Controller
 {
     public function index()
     {
-        return inertia:: render('Home-Tasks');
+        return Inertia:: render('Home-Tasks');
     }
 }

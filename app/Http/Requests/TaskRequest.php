@@ -12,8 +12,7 @@ class TaskRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $user_id = $this->route('task') ? $this->route('task')->user_id : null;
-        return auth()->check() && auth()->id() === $user_id;
+        return auth()->check();
     }
 
     /**
@@ -24,10 +23,9 @@ class TaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|min:6|max:100',
-            'description' => 'nullable|min:10|max:1000', 
-            'status' => 'required|in:pending,in_progress,completed',
-            'user_id' => 'required|exists:users,id',
+            'title' => 'string|required|min:6|max:100',
+            'description' => 'nullable|string|min:10|max:1000', 
+            'status' => 'string|required|in:pending,in_progress,completed',
         ];
     }
 }
