@@ -5,7 +5,7 @@
 </head>
 <body>
     <p>Bem-vindo</p>
-    <form method = "POST" action =" {{ route('usuario.store')}}">
+    <form method = "HEAD" action =" {{ route('usuario.store')}}">
     @csrf
     <p>nome <p>
     <input type = "text" name ="nome" >
