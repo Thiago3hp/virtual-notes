@@ -7,15 +7,15 @@ import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Dashboard',
+        title: 'Virtual notes',
         href: dashboard(),
     },
 ];
 </script>
 
 <template>
-    <Head title="Dashboard" />
-    <p> grfrf</p>
+    <Head title="Dashboard"/>
+
     <AppLayout :breadcrumbs="breadcrumbs">
         <div
             class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"

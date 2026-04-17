@@ -15,14 +15,27 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import { tasks } from '@/routes';
+import { statistics } from '@/routes';
+
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
+        title: 'Virtual notes',
         href: dashboard(),
         icon: LayoutGrid,
     },
+    {
+        title: 'Tasks',
+        href: tasks(),
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Statistics',
+        href: statistics(),
+        icon: LayoutGrid,
+    }
 ];
 
 const footerNavItems: NavItem[] = [
