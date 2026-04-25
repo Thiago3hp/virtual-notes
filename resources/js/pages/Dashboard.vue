@@ -4,6 +4,8 @@ import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import type { BreadcrumbItem } from '@/types';
+import HeaderHero from '@/components/HeaderHero.vue';
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -17,9 +19,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     <Head title="Dashboard"/>
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div
-            class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
-        >
+        <HeaderHero />
             <div class="grid auto-rows-min gap-4 md:grid-cols-3">
                 <div
                     class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border"
@@ -42,6 +42,6 @@ const breadcrumbs: BreadcrumbItem[] = [
             >
                 <PlaceholderPattern />
             </div>
-        </div>
+   
     </AppLayout>
 </template>

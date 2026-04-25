@@ -14,9 +14,10 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
-import { tasks } from '@/routes';
-import { statistics } from '@/routes';
+import { 
+    dashboard,
+    taskshome,
+    statistics } from '@/routes';
 
 import type { NavItem } from '@/types';
 
@@ -28,7 +29,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Tasks',
-        href: tasks(),
+        href: taskshome(),
         icon: LayoutGrid,
     },
     {
@@ -37,21 +38,7 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     }
 ];
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: FolderGit2,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
-    },
-];
 </script>
-
 <template>
     <Sidebar collapsible="icon" variant="inset">
         <SidebarHeader>
@@ -71,7 +58,6 @@ const footerNavItems: NavItem[] = [
         </SidebarContent>
 
         <SidebarFooter>
-            <NavFooter :items="footerNavItems" />
             <NavUser />
         </SidebarFooter>
     </Sidebar>

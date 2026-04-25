@@ -12,12 +12,13 @@ class TaskCreateController extends Controller
     public function store(TaskRequest $request, TaskService $service)
     {   
         try {
-        $task = $service -> create($request -> validated());
+        $task = $service -> createTask($request -> validated());
         }
         catch (\Exception $e){
-            return response()->json(['message' => 'Erro ao criar tarefa.'], 500);
+           dd($e->getMessage());
         }
 
-        return new TaskResource($task);
+        return redirect ()->back()->with('success', 'Tarefa criada com sucesso!');
     }
+    
 }

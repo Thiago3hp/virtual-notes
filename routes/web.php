@@ -5,6 +5,7 @@ use Laravel\Fortify\Features;
 use App\Http\Controllers\TelaInicialController;
 use App\Http\Controllers\TaskViewController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\TaskCreateController;
 
 
 Route::inertia('/', 'Welcome', [
@@ -13,15 +14,9 @@ Route::inertia('/', 'Welcome', [
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
-    route::inertia('tasks', 'Tasks')->name('tasks');
-    route::inertia('statistics', 'Statistics')->name('statistics');
+    Route::inertia('taskshome', 'TasksHome')->name('taskshome');
+    Route::post('/tasks', [TaskCreateController::class, 'store']);
+    Route::inertia('statistics', 'Statistics')->name('statistics');
 });
 
-// Route::get('/Welcome', [TaskViewController::class, 'index'])->name('welcome');
-
-Route::get('/home-tasks', [TaskViewController::class, 'index']);
-// Route::get('/login', [TelaInicialController::class, 'index']);
-// Route::get('usuario.store', [UsuarioController::class, 'store'])->name('usuario.store');
-
-// Route::get('/usuario.store'),
 require __DIR__.'/settings.php';
