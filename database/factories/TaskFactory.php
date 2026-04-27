@@ -20,7 +20,7 @@ class TaskFactory extends Factory
         return [
             'title' => fake()->sentence(),
             'description' => fake()->paragraph(),
-            'status' => fake()->randomElement(['pending', 'in_progress', 'completed']),
+            'status' => fake()->randomElement(['in_pending', 'in_progress', 'done']),
             'user_id' => \App\Models\User::factory(),
         
         ];

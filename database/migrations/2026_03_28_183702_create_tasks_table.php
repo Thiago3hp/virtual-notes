@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id()-> autoIncrement();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->enum('status',['in_progress','pending','done']);
+            $table->enum('status',['in_pending','in_progress','done']);
             $table->timestamps();
             $table->softDeletes('trash');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
