@@ -25,7 +25,7 @@ class TaskRequest extends FormRequest
         return [
             'title' => 'string|required|min:5|max:100',
             'description' => 'nullable|string|min:5|max:1000', 
-            'status' => 'string|required|in:pending, in_progress, done',
+            'status' => 'string|required|in:in_pending, in_progress, done',
         ];
     }
 }

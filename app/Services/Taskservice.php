@@ -2,18 +2,14 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\Task;
 
 class Taskservice
 {
     public function createTask(array $dados)
     {
-        // if (isset($dados['user_id'])) {
-        //     $dados['user_id'] = $dados['user_id'];
-        // } else {
-        //     $dados['user_id'] = null;
-        // }
-
+        $dados['user_id'] = Auth::id();
         return Task::create($dados);
     }
 

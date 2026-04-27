@@ -48,7 +48,7 @@ function addTask() {
       task.value = {
         title: '',
         description: '',
-        status: 'pending,in_progress,done',
+        status: 'in_pending,in_progress,done',
       }
       successMessage.value ='Task created successfully!'
     }
@@ -92,7 +92,7 @@ function addTask() {
                                 <SelectValue placeholder="Select task status" /> 
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="pending">Pending</SelectItem>
+                                <SelectItem value="in_pending">Pending</SelectItem>
                                 <SelectItem value="in_progress">In Progress</SelectItem>
                                 <SelectItem value="done">Done</SelectItem>
                             </SelectContent>
