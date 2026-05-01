@@ -12,12 +12,20 @@ import AuthBase from '@/layouts/AuthLayout.vue';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
+import type { BreadcrumbItem } from '@/types';
 
 defineProps<{
     status?: string;
     canResetPassword: boolean;
     canRegister: boolean;
 }>();
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Login',
+        href: "/login",
+    },
+];
 </script>
 
 <template>

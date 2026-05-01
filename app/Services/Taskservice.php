@@ -19,6 +19,11 @@ class Taskservice
         return $task;
     }
 
+    public function tasklist()
+    {
+        return Task::all();
+    }
+
     public function searchTaskName(string $name)
     {
         if (isset($name)) {

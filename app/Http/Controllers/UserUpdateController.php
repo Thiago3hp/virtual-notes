@@ -17,7 +17,7 @@ class UserUpdateController extends Controller
             return new UserResource($usuario);
         } 
         catch (\Exception $e){
-            return response()->json(['message' => 'Usuário não encontrado.'], 404);
+            return redirect ()->back()->with('error', 'Usuário não encontrado.');
         }
     }
 }

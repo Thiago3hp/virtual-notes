@@ -11,10 +11,10 @@ class UserDeleteController extends Controller
     {
        try{
             $service -> softDelete($id);
-        return response()->json(['message' => 'Usuário deletado com sucesso.']);
+        return redirect ()->back()->with('success', 'Usuário deletado com sucesso!');
         }
         catch(\Exception $e){
-            return response()->json(['message' => 'Usuário não encontrado.'], 404);
+            return redirect ()->back()->with('error', 'Usuário não encontrado.');
         }
     }
 }

@@ -13,10 +13,10 @@ class TaskDeleteSoftController extends Controller
        try{
             $service -> deleteTask($id);
 
-        return response()->json(['message' => 'Tarefa deletada com sucesso.']);
+        return redirect ()->back()->with('success', 'Tarefa deletada com sucesso!');
         }
         catch(\Exception $e){
-            return response()->json(['message' => 'Tarefa não encontrada.'], 404);
+            return redirect ()->back()->with('error', 'Tarefa não encontrada.');
         } 
     }
 }

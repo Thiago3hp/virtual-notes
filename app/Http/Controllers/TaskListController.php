@@ -6,24 +6,27 @@ use Illuminate\Http\Request;
 use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Services\TaskService;
+use inertia\Inertia;
 
 
 class TaskListController extends Controller
 {
-    public function index(TaskService $service)
+    public function showList(TaskService $service)
     {
-        $tasks = $service -> list();
-        return TaskResource::collection($tasks);
+        $tasks = $service -> tasklist();
+        return Inertia::render('TasksHome', [
+            'tasks' => TaskResource::collection($tasks),
+    ]);
     }
 
-    public function showList ($id,TaskRequest $request, TaskService $service)
+    public function showListId ($id,TaskRequest $request, TaskService $service)
     {
         try {
             $task = $service -> find($id);
             return new TaskResource($task);
         } 
         catch (\Exception $e){
-            return response()->json(['message' => 'Tarefa não encontrada.'], 404);
+           return redirect ()->back()->with('error', 'Tarefa não encontrada.');
         }
 
     }
@@ -38,7 +41,7 @@ class TaskListController extends Controller
         return TaskResource::collection($tasks);
         }
         catch (\Exception $e){
-            return response()->json(['message' => 'Tarefa não encontrada.'], 404);
+            return redirect ()->back()->with('error', 'Tarefa não encontrada.');
         }
     }
 
@@ -52,7 +55,7 @@ class TaskListController extends Controller
         return TaskResource::collection($tasks);
         }
         catch (\Exception $e){
-            return response()->json(['message' => 'Tarefa não encontrada.'], 404);
+            return redirect ()->back()->with('error', 'Tarefa não encontrada.');
         }
     }
 }

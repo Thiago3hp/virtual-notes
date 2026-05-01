@@ -17,7 +17,7 @@ class TaskUpdateController extends Controller
             return new TaskResource($task);
         } 
         catch (\Exception $e){
-            return response()->json(['message' => 'Tarefa não encontrada.'], 404);
+            return redirect ()->back()->with('error', 'Tarefa não encontrada.');
         }
     }
 }

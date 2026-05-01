@@ -11,10 +11,10 @@ class UserRestoreController extends Controller
     {
         try {
             $service -> restore($id);
-            return response()->json(['message' => 'Usuário restaurado com sucesso.']);
+            return redirect ()->back()->with('success', 'Usuário restaurado com sucesso!');
         } 
         catch (\Exception $e){
-            return response()->json(['message' => 'Usuário não encontrado.'], 404);
+            return redirect ()->back()->with('error', 'Usuário não encontrado.');
         }
     }
 }
