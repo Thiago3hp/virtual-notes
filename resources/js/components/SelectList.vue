@@ -17,8 +17,8 @@ const props = defineProps<{
 
 type Task = {
     id: number,
-    title: String,
-    description: String,
+    title: string,
+    description: string,
     status: 'in_pending' | 'in_progress' | 'done'
 }
 const task_edit = ref({
@@ -27,9 +27,7 @@ const task_edit = ref({
     status: 'in_pending' as Task['status'],
 })
 
-
 </script>
-
 
 <template>
 <Select v-model="task_edit">
@@ -37,7 +35,7 @@ const task_edit = ref({
         <SelectValue placeholder="Select your task" />
     </SelectTrigger>    
         <SelectContent class="w-full rounded-lg border p-2">
-            <SelectItem
+            <SelectItem 
                 v-for="task in props.tasks.data"  
                 :key="task.id"
                 :value="task"

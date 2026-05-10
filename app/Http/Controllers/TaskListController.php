@@ -13,10 +13,10 @@ class TaskListController extends Controller
 {
     public function showList(TaskService $service)
     {
-        $tasks = $service -> tasklist();
+        $task = $service -> tasklist();
         return Inertia::render('TasksHome', [
-            'tasks' => TaskResource::collection($tasks),
-    ]);
+            'task' => TaskResource::collection($task),
+        ]);
     }
 
     public function showListId ($id,TaskRequest $request, TaskService $service)
@@ -36,7 +36,7 @@ class TaskListController extends Controller
         try{
         $name = $request->input('name');
 
-        $tasks = $service -> searchTaskName($name);
+        $task = $service -> searchTaskName($name);
 
         return TaskResource::collection($tasks);
         }
@@ -50,9 +50,9 @@ class TaskListController extends Controller
         try{
         $status = $request->input('status');
 
-        $tasks = $service -> searchTaskStatus($status);
+        $task = $service -> searchTaskStatus($status);
 
-        return TaskResource::collection($tasks);
+        return TaskResource::collection($task);
         }
         catch (\Exception $e){
             return redirect ()->back()->with('error', 'Tarefa não encontrada.');

@@ -5,6 +5,7 @@ use Laravel\Fortify\Features;
 use App\Http\Controllers\TaskListController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\TaskCreateController;
+use App\Http\Controllers\TaskUpdateConrtoller;
 use inertia\Inertia;
 
 
@@ -27,9 +28,9 @@ if (Features::enabled(Features::registration())) {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
-    Route::inertia('taskshome', 'TasksHome')->name('taskshome');
     Route::post('/tasks', [TaskCreateController::class, 'store']);
-    Route::get('/tasks_edit', [TaskListController::class, 'showList']);
+    Route::get('/taskshome', [TaskListController::class, 'showList'])->name ('taskshome');
+    Route::put('/tasks_update',[TaskUpdateController::class, 'update']);
     Route::inertia('statistics', 'Statistics')->name('statistics');
 });
 

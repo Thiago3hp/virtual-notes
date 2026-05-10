@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { DialogRoot } from 'reka-ui';
 import {
     DialogTitle,
     DialogTrigger,
@@ -28,8 +27,8 @@ const page =usePage()
 
 type Task = {
     id: number,
-    title: String,
-    description: String,
+    title: string,
+    description: string,
     status: 'in_pending' | 'in_progress' | 'done'
 }
 
@@ -61,14 +60,14 @@ function addTask() {
 </script>
 
 <template>
-    <DialogRoot>
-        <DialogTitle> create your new task!!</DialogTitle>
+    <DialogRoot children>
         <DialogTrigger class="w-full">
             <Button variant="outline" size="sm">
                 Add your new task
             </Button>
         </DialogTrigger>
         <DialogContent class="w-64 p-4 space-y-3" :close-on-select="false">
+            <DialogTitle> create your new task!!</DialogTitle>
             <DialogDescription>
                 Add your new task
             </DialogDescription>

@@ -13,9 +13,10 @@ class TaskUpdateController extends Controller
     public function update($id, TaskRequest $request, TaskService $service)
     {
         try {
-            $task = $service -> update($id, $request -> validated());
-            return new TaskResource($task);
-        } 
+        $service->update($id, $request->validated());
+
+        return redirect()->route('Taskshome');
+    }
         catch (\Exception $e){
             return redirect ()->back()->with('error', 'Tarefa não encontrada.');
         }
