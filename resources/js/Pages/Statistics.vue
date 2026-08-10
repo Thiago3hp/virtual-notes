@@ -1,30 +1,28 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 import { statistics } from '@/routes';
-import type { BreadcrumbItem } from '@/types';
-import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
+import type { BreadcrumbItem, MonthlyCount } from '@/types';
 import AppLayout from '@/layouts/AppLayout.vue';
+import CompletedByMonthChart from '@/components/CompletedByMonthChart.vue';
+
+const props = defineProps<{
+    concluidosPorMes: MonthlyCount[];
+}>();
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Statistics',
         href: statistics(),
     },
 ];
-
 </script>
+
 <template>
-    <Head title="Statistics"/>
+    <Head title="Statistics" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-            <div
-                class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border"
-            >
-            <div class="container" >
-                <h1>tela de listagem</h1>
-                <p>Em breve...</p>
-            </div>
-                <PlaceholderPattern />
-            </div>
-            
+        <div class="p-4">
+            <CompletedByMonthChart :data="props.concluidosPorMes" />
+        </div>
     </AppLayout>
 </template>

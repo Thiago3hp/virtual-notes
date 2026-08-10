@@ -21,6 +21,7 @@ class ChamadoResource extends JsonResource
             'status' => $this->status,
             'prazo' => $this->prazo?->toDateString(),
             'prioridade' => $this->prioridade,
+            'data_coleta' => $this->data_coleta?->toDateString(),
             'tecnico_nome' => $this->tecnico_nome,
             'laudo_tecnico' => $this->laudo_tecnico,
             'avaliacao' => $this->avaliacao,

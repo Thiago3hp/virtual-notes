@@ -13,6 +13,7 @@ export type Chamado = {
     status: ChamadoStatus;
     prazo: string | null;
     prioridade: ChamadoPrioridade;
+    data_coleta: string | null;
     tecnico_nome: string | null;
     laudo_tecnico: string | null;
     avaliacao: number | null;
@@ -30,6 +31,7 @@ export type ChamadoFormData = {
     status: ChamadoStatus;
     prazo: string | null;
     prioridade: ChamadoPrioridade;
+    data_coleta: string | null;
     tecnico_nome: string | null;
     laudo_tecnico: string | null;
 };

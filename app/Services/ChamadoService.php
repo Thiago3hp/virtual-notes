@@ -37,6 +37,39 @@ class ChamadoService
     }
 
     /**
+     * Chamados fechados, agrupados por mês de fechamento (fechado_em).
+     * Retorna os últimos $months meses, incluindo meses sem nenhum
+     * chamado concluído (total 0), pra o gráfico não ficar com buracos.
+     */
+    public function completedByMonth(int $months = 6): array
+    {
+        $start = now()->startOfMonth()->subMonths($months - 1);
+
+        $rows = Chamado::where('status', 'fechado')
+            ->whereNotNull('fechado_em')
+            ->where('fechado_em', '>=', $start)
+            ->selectRaw("DATE_FORMAT(fechado_em, '%Y-%m') as month, COUNT(*) as total")
+            ->groupBy('month')
+            ->pluck('total', 'month');
+
+        $meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+
+        $result = [];
+        for ($i = $months - 1; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $key = $date->format('Y-m');
+
+            $result[] = [
+                'month' => $key,
+                'label' => $meses[$date->month - 1].'/'.$date->format('y'),
+                'total' => (int) ($rows[$key] ?? 0),
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
      * Dashboard-only fields the bot never touches: técnico assigned,
      * status, laudo, prazo, prioridade. Mirrors what the bot's own
      * "tecnico" flow does over WhatsApp (see closeTicketWithReport in

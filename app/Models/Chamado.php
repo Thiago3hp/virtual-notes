@@ -41,6 +41,7 @@ class Chamado extends Model
         'solicitante_jid',
         'prazo',
         'prioridade',
+        'data_coleta',
     ];
 
     protected function casts(): array
@@ -49,6 +50,7 @@ class Chamado extends Model
             'criado_em' => 'datetime',
             'fechado_em' => 'datetime',
             'prazo' => 'date',
+            'data_coleta' => 'date',
             'avaliacao' => 'integer',
         ];
     }

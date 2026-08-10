@@ -31,6 +31,7 @@ class ChamadoRequest extends FormRequest
             'status' => 'sometimes|string|in:aberto,em_andamento,fechado',
             'prazo' => 'nullable|date',
             'prioridade' => 'sometimes|string|in:Baixa,Normal,Alta,Urgente',
+            'data_coleta' => 'nullable|date',
             'tecnico_nome' => 'nullable|string|max:255',
             'laudo_tecnico' => 'nullable|string',
         ];

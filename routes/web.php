@@ -5,6 +5,7 @@ use App\Http\Controllers\ChamadoCreateController;
 use App\Http\Controllers\ChamadoDeleteController;
 use App\Http\Controllers\ChamadoListController;
 use App\Http\Controllers\ChamadoUpdateController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDeleteController;
 use App\Http\Controllers\UserListController;
@@ -33,7 +34,7 @@ if (Features::enabled(Features::registration())) {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
-    Route::inertia('statistics', 'Statistics')->name('statistics');
+    Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics');
 
     // Chamados (alimentados pelo bot do WhatsApp; editados/encerrados aqui)
     Route::get('/chamadoshome', [ChamadoListController::class, 'showList'])->name('chamadoshome');
