@@ -1,14 +1,29 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import chamados from '@/routes/chamados';
 import { DialogRoot, DialogTitle, DialogContent, AlertTitle, AlertDescription } from '@/imports';
 import { Alert } from '@/components/ui/alert';
-import type { Chamado, ChamadoFormData } from '@/types';
+import type { Chamado, ChamadoFormData, Cliente } from '@/types';
 
 const props = defineProps<{
     chamado: Chamado | null;
+    clientes: Cliente[];
 }>();
+
+// Chamados antigos/vindos do bot podem ter um setor que ainda não foi
+// cadastrado em Clientes -- garante que ele continue aparecendo como
+// opção pra não sumir/trocar sozinho ao editar.
+const clientesParaSelecao = computed(() => {
+    const nomes = new Set(props.clientes.map((c) => c.nome));
+    const atual = props.chamado?.setor;
+
+    if (atual && !nomes.has(atual)) {
+        return [{ id: -1, nome: atual }, ...props.clientes];
+    }
+
+    return props.clientes;
+});
 
 const open = defineModel<boolean>('open', { default: false });
 
@@ -86,7 +101,10 @@ function updateChamado() {
                 </div>
                 <div>
                     <label class="os-label">Cliente</label>
-                    <input v-model="form.setor" class="os-field" />
+                    <select v-model="form.setor" class="os-field os-select">
+                        <option value="" disabled>Selecione um cliente</option>
+                        <option v-for="c in clientesParaSelecao" :key="c.id" :value="c.nome">{{ c.nome }}</option>
+                    </select>
                 </div>
             </div>
 

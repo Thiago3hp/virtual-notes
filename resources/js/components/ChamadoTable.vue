@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import chamados from '@/routes/chamados';
 import type { Chamado, ChamadoStatus } from '@/types';
@@ -16,6 +17,24 @@ const statusLabel: Record<ChamadoStatus, string> = {
     em_andamento: 'Em Andamento',
     fechado: 'Concluída',
 };
+
+const busca = ref('');
+const statusFiltro = ref<ChamadoStatus | ''>('');
+
+const chamadosFiltrados = computed(() => {
+    const termo = busca.value.trim().toLowerCase();
+
+    return props.chamados.filter((chamado) => {
+        const bateBusca =
+            !termo ||
+            chamado.problema.toLowerCase().includes(termo) ||
+            chamado.setor.toLowerCase().includes(termo);
+
+        const bateStatus = !statusFiltro.value || chamado.status === statusFiltro.value;
+
+        return bateBusca && bateStatus;
+    });
+});
 
 function formatPrazo(prazo: string | null) {
     if (!prazo) return '—';
@@ -36,6 +55,21 @@ function destroyChamado(chamado: Chamado) {
 
 <template>
     <div class="chamado-table">
+        <div class="chamado-table__search">
+            <input
+                v-model="busca"
+                class="search-input"
+                placeholder="Buscar por título ou cliente..."
+            />
+            <select v-model="statusFiltro" class="search-select">
+                <option value="">Todos os status</option>
+                <option value="aberto">Aberta</option>
+                <option value="em_andamento">Em Andamento</option>
+                <option value="fechado">Concluída</option>
+            </select>
+            <span class="search-count">{{ chamadosFiltrados.length }} de {{ props.chamados.length }}</span>
+        </div>
+
         <div class="chamado-table__scroll">
             <table>
                 <thead>
@@ -51,7 +85,7 @@ function destroyChamado(chamado: Chamado) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="chamado in props.chamados" :key="chamado.id">
+                    <tr v-for="chamado in chamadosFiltrados" :key="chamado.id">
                         <td class="col-id">{{ chamado.id }}</td>
                         <td class="cell-title">{{ chamado.problema }}</td>
                         <td class="cell-muted">{{ chamado.setor }}</td>
@@ -75,9 +109,9 @@ function destroyChamado(chamado: Chamado) {
                         </td>
                     </tr>
 
-                    <tr v-if="!props.chamados.length">
+                    <tr v-if="!chamadosFiltrados.length">
                         <td colspan="8" class="empty">
-                            Nenhum chamado registrado ainda.
+                            {{ props.chamados.length ? 'Nenhum chamado corresponde à busca.' : 'Nenhum chamado registrado ainda.' }}
                         </td>
                     </tr>
                 </tbody>
@@ -101,6 +135,50 @@ function destroyChamado(chamado: Chamado) {
     border-radius: 0.75rem;
     overflow: hidden;
     color: var(--ct-text);
+}
+
+.chamado-table__search {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--ct-border);
+}
+
+.search-input {
+    flex: 1;
+    background: hsl(222 44% 9%);
+    border: 1px solid var(--ct-border);
+    border-radius: 0.6rem;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.85rem;
+    color: var(--ct-text);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: hsl(217 91% 60%);
+}
+
+.search-select {
+    background: hsl(222 44% 9%);
+    border: 1px solid var(--ct-border);
+    border-radius: 0.6rem;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.85rem;
+    color: var(--ct-text);
+    cursor: pointer;
+}
+
+.search-select:focus {
+    outline: none;
+    border-color: hsl(217 91% 60%);
+}
+
+.search-count {
+    font-size: 0.75rem;
+    color: var(--ct-muted);
+    white-space: nowrap;
 }
 
 .chamado-table__scroll {

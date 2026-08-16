@@ -36,6 +36,16 @@ class ChamadoService
         return Chamado::where('setor', 'LIKE', '%'.$setor.'%')->orderByDesc('criado_em')->get();
     }
 
+    public function summary(): array
+    {
+        return [
+            'total' => Chamado::count(),
+            'abertos' => Chamado::where('status', 'aberto')->count(),
+            'em_andamento' => Chamado::where('status', 'em_andamento')->count(),
+            'fechados' => Chamado::where('status', 'fechado')->count(),
+        ];
+    }
+
     /**
      * Chamados fechados, agrupados por mês de fechamento (fechado_em).
      * Retorna os últimos $months meses, incluindo meses sem nenhum
@@ -74,10 +84,25 @@ class ChamadoService
      * status, laudo, prazo, prioridade. Mirrors what the bot's own
      * "tecnico" flow does over WhatsApp (see closeTicketWithReport in
      * ticketService.js), but from the web.
+     *
+     * Se o status for alterado pra "fechado" por aqui (ex: mudando o
+     * Status direto no diálogo de editar, sem passar pelo fluxo dedicado
+     * de fechamento), carimba fechado_em na hora -- senão o chamado nunca
+     * aparece no gráfico de "concluídos por mês", que depende dessa data.
+     * Se for reaberto depois, limpa fechado_em de volta.
      */
     public function update(int $id, array $dados): Chamado
     {
         $chamado = Chamado::findOrFail($id);
+
+        if (array_key_exists('status', $dados)) {
+            if ($dados['status'] === 'fechado' && ! $chamado->fechado_em) {
+                $dados['fechado_em'] = now();
+            } elseif ($dados['status'] !== 'fechado') {
+                $dados['fechado_em'] = null;
+            }
+        }
+
         $chamado->update($dados);
 
         return $chamado;

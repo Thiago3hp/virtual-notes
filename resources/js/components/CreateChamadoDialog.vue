@@ -4,7 +4,11 @@ import { router, usePage } from '@inertiajs/vue3';
 import chamados from '@/routes/chamados';
 import { DialogRoot, DialogTitle, DialogTrigger, DialogContent, Button, AlertTitle, AlertDescription } from '@/imports';
 import { Alert } from '@/components/ui/alert';
-import type { ChamadoCreateData } from '@/types';
+import type { ChamadoCreateData, Cliente } from '@/types';
+
+const props = defineProps<{
+    clientes: Cliente[];
+}>();
 
 const page = usePage();
 const flash = () => page.props.flash as { success?: string; error?: string };
@@ -81,7 +85,10 @@ function createChamado() {
             <div class="os-row2">
                 <div>
                     <label class="os-label">Cliente *</label>
-                    <input v-model="form.setor" class="os-field" placeholder="Ex: Farmácia - CES" />
+                    <select v-model="form.setor" class="os-field os-select">
+                        <option value="" disabled>Selecione um cliente</option>
+                        <option v-for="c in props.clientes" :key="c.id" :value="c.nome">{{ c.nome }}</option>
+                    </select>
                 </div>
                 <div>
                     <label class="os-label">Sala / local</label>

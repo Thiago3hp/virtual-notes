@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ChamadoRequest;
 use App\Http\Resources\ChamadoResource;
+use App\Http\Resources\ClienteResource;
 use App\Services\ChamadoService;
+use App\Services\ClienteService;
 use Inertia\Inertia;
 
 class ChamadoListController extends Controller
 {
-    public function showList(ChamadoService $service)
+    public function showList(ChamadoService $service, ClienteService $clienteService)
     {
         return Inertia::render('ChamadosHome', [
             'chamado' => ChamadoResource::collection($service->list()),
+            'cliente' => ClienteResource::collection($clienteService->list()),
         ]);
     }
 
