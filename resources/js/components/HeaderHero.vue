@@ -4,7 +4,7 @@
       <h1 class="text-3xl font-bold text-white-800 leading-snug">
         Sistema de gerenciamento de ordens de serviço, <br />
         <br />
-        integração com bot de forma <span class="text-blue-600">automática.</span>
+        integração com bot de formulário <span class="text-blue-600">automática.</span>
       </h1>
     </div>
     <div class="hidden md:flex items-center justify-center">
