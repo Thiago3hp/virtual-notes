@@ -39,7 +39,7 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
-        <?php echo app('Illuminate\Foundation\Vite')(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"]); ?>
+        <?php echo app('Illuminate\Foundation\Vite')(['resources/js/app.ts']); ?>
         <?php if (!isset($__inertiaSsrDispatched)) { $__inertiaSsrDispatched = true; $__inertiaSsrResponse = app(\Inertia\Ssr\Gateway::class)->dispatch($page); }  if ($__inertiaSsrResponse) { echo $__inertiaSsrResponse->head; } ?>
     </head>
     <body class="font-sans antialiased">
