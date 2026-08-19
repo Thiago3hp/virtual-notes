@@ -185,10 +185,32 @@ function destroyChamado(chamado: Chamado) {
     overflow-x: auto;
     max-height: 70vh;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(222 33% 22%) transparent;
+}
+
+.chamado-table__scroll::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.chamado-table__scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chamado-table__scroll::-webkit-scrollbar-thumb {
+    background: hsl(222 33% 22%);
+    border-radius: 999px;
+}
+
+.chamado-table__scroll::-webkit-scrollbar-thumb:hover {
+    background: hsl(222 33% 30%);
 }
 
 table {
     width: 100%;
+    min-width: 60rem;
+    table-layout: fixed;
     border-collapse: collapse;
     font-size: 0.875rem;
 }
@@ -225,22 +247,26 @@ tbody tr:hover td {
 
 .col-id {
     color: var(--ct-muted);
-    width: 3.5rem;
+    width: 3rem;
 }
 
 .cell-title {
     font-weight: 500;
     color: var(--ct-text);
     white-space: normal;
-    max-width: 22rem;
+    width: 22%;
 }
 
 .cell-muted {
     color: var(--ct-text);
+    width: 14%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .col-prazo {
     color: var(--ct-muted);
+    width: 6.5rem;
 }
 
 .col-prazo.is-overdue {
@@ -251,14 +277,17 @@ tbody tr:hover td {
 .col-prioridade {
     color: var(--ct-link);
     font-weight: 500;
+    width: 7rem;
 }
 
 .col-status {
     white-space: nowrap;
+    width: 9rem;
 }
 
 .col-actions {
     text-align: right;
+    width: 12rem;
 }
 
 .badge {
