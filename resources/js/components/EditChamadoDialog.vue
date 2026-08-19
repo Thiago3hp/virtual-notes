@@ -77,6 +77,14 @@ function formatDate(value: string | null) {
     return `${day}/${month}/${year}`;
 }
 
+function formatDateTime(value: string | null) {
+    if (!value) return null;
+    const [datePart, timePart] = value.split(' ');
+    const [year, month, day] = datePart.split('-');
+    const hora = timePart ? timePart.slice(0, 5) : '';
+    return `${day}/${month}/${year}${hora ? ` às ${hora}` : ''}`;
+}
+
 function updateChamado() {
     if (!props.chamado || !form.value.setor || !form.value.problema) return;
 
@@ -159,6 +167,21 @@ function updateChamado() {
                     <span class="os-date-value">{{ formatDate(form.data_coleta) || 'Sem data definida' }}</span>
                     <button type="button" class="os-date-toggle" @click="editingColeta = true">Definir data da coleta</button>
                 </template>
+            </div>
+
+            <div class="os-row2">
+                <div>
+                    <label class="os-label">Criado em</label>
+                    <div class="os-readonly-box">
+                        {{ formatDateTime(props.chamado?.criado_em ?? null) || '—' }}
+                    </div>
+                </div>
+                <div>
+                    <label class="os-label">Fechado em</label>
+                    <div class="os-readonly-box">
+                        {{ formatDateTime(props.chamado?.fechado_em ?? null) || 'Ainda não fechado' }}
+                    </div>
+                </div>
             </div>
 
             <label class="os-label">Laudo técnico</label>
@@ -284,6 +307,18 @@ function updateChamado() {
     flex-direction: column;
     justify-content: center;
     gap: 0.2rem;
+}
+
+.os-readonly-box {
+    background: hsl(222 40% 7%);
+    border: 1px dashed hsl(222 33% 18%);
+    border-radius: 0.65rem;
+    padding: 0.6rem 0.75rem;
+    min-height: 3.3rem;
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: hsl(215 20% 62%);
 }
 
 .os-date-value {
