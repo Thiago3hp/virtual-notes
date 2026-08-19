@@ -16,6 +16,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('clientes', function (Blueprint $table) {
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_0900_ai_ci';
+
             $table->id();
             $table->string('nome', 100)->unique();
             $table->timestamps();

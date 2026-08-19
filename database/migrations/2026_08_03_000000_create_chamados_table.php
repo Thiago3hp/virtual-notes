@@ -23,6 +23,15 @@ return new class extends Migration
         }
 
         Schema::create('chamados', function (Blueprint $table) {
+            // Alinhado com o padrão do MySQL 8 (o que a conexão raw do
+            // bot usa, já que ele não especifica charset/collation nos
+            // CREATE TABLE dele). Isso só importa se essa migration
+            // chegar a rodar de verdade (ambiente novo, sem o bot ter
+            // criado a tabela antes) -- evita reintroduzir o erro
+            // "Illegal mix of collations" que aconteceu com clientes.nome.
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_0900_ai_ci';
+
             $table->id();
             $table->string('solicitante_nome')->nullable();
             $table->string('setor', 100);

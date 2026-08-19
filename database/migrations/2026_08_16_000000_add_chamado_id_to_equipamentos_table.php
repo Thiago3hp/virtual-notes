@@ -13,20 +13,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        if (!Schema::hasColumn('equipamentos', 'chamado_id')) {
-            Schema::table('equipamentos', function (Blueprint $table) {
-                $table->foreignId('chamado_id')->nullable()->after('quantidade')
-                    ->constrained('chamados')->nullOnDelete();
-            });
-        }
+        Schema::table('equipamentos', function (Blueprint $table) {
+            $table->foreignId('chamado_id')->nullable()->after('quantidade')
+                ->constrained('chamados')->nullOnDelete();
+        });
     }
 
     public function down(): void
     {
-        if (Schema::hasColumn('equipamentos', 'chamado_id')) {
-            Schema::table('equipamentos', function (Blueprint $table) {
-                $table->dropConstrainedForeignId('chamado_id');
-            });
-        }
+        Schema::table('equipamentos', function (Blueprint $table) {
+            $table->dropConstrainedForeignId('chamado_id');
+        });
     }
 };
