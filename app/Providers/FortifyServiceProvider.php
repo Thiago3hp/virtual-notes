@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Actions\Fortify\AuthenticateWithTecnicoNumero;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -40,6 +42,18 @@ class FortifyServiceProvider extends ServiceProvider
     {
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::createUsersUsing(CreateNewUser::class);
+
+        // Segundo fator: exige o número de técnico em toda tentativa de
+        // login, além de email/senha (veja AuthenticateWithTecnicoNumero).
+        Fortify::authenticateUsing(function (Request $request) {
+            Validator::make($request->all(), [
+                'numero_tecnico' => 'required|string',
+            ], [
+                'numero_tecnico.required' => 'Informe o número de técnico.',
+            ])->validate();
+
+            return (new AuthenticateWithTecnicoNumero)($request);
+        });
     }
 
     /**

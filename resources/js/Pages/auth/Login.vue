@@ -71,7 +71,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                             v-if="canResetPassword"
                             :href="request()"
                             class="text-sm"
-                            :tabindex="5"
+                            :tabindex="6"
                         >
                             Forgot password?
                         </TextLink>
@@ -87,9 +87,23 @@ const breadcrumbs: BreadcrumbItem[] = [
                     <InputError :message="errors.password" />
                 </div>
 
+                <div class="grid gap-2">
+                    <Label for="numero_tecnico">Número de técnico</Label>
+                    <Input
+                        id="numero_tecnico"
+                        type="text"
+                        name="numero_tecnico"
+                        required
+                        :tabindex="3"
+                        autocomplete="off"
+                        placeholder="Ex: 5586999999999"
+                    />
+                    <InputError :message="errors.numero_tecnico" />
+                </div>
+
                 <div class="flex items-center justify-between">
                     <Label for="remember" class="flex items-center space-x-3">
-                        <Checkbox id="remember" name="remember" :tabindex="3" />
+                        <Checkbox id="remember" name="remember" :tabindex="4" />
                         <span>Remember me</span>
                     </Label>
                 </div>
@@ -97,7 +111,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <Button
                     type="submit"
                     class="mt-4 w-full"
-                    :tabindex="4"
+                    :tabindex="5"
                     :disabled="processing"
                     data-test="login-button"
                 >
@@ -111,7 +125,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                 v-if="canRegister"
             >
                 Don't have an account?
-                <TextLink :href="register()" :tabindex="5">Sign up</TextLink>
+                <TextLink :href="register()" :tabindex="6">Sign up</TextLink>
             </div>
         </Form>
     </AuthBase>

@@ -21,6 +21,21 @@ const statusLabel: Record<ChamadoStatus, string> = {
 const busca = ref('');
 const statusFiltro = ref<ChamadoStatus | ''>('');
 
+// Número exibido na coluna "#" -- sequencial (1..N), não o id real do
+// banco. Isso é só cosmético: o id de verdade continua intacto (é usado
+// pelo bot, pelo vínculo com equipamentos, etc.), só a exibição muda pra
+// não mostrar buracos quando chamados de teste são excluídos. A lista já
+// chega ordenada do mais recente pro mais antigo, então o mais recente
+// recebe o número mais alto (mantém a intuição de "número maior = mais novo").
+const numeroExibido = computed(() => {
+    const total = props.chamados.length;
+    const map = new Map<number, number>();
+    props.chamados.forEach((chamado, index) => {
+        map.set(chamado.id, total - index);
+    });
+    return map;
+});
+
 const chamadosFiltrados = computed(() => {
     const termo = busca.value.trim().toLowerCase();
 
@@ -86,7 +101,7 @@ function destroyChamado(chamado: Chamado) {
                 </thead>
                 <tbody>
                     <tr v-for="chamado in chamadosFiltrados" :key="chamado.id">
-                        <td class="col-id">{{ chamado.id }}</td>
+                        <td class="col-id">{{ numeroExibido.get(chamado.id) }}</td>
                         <td class="cell-title">{{ chamado.problema }}</td>
                         <td class="cell-muted">{{ chamado.setor }}</td>
                         <td class="cell-muted">{{ chamado.tecnico_nome || '—' }}</td>
