@@ -42,6 +42,7 @@ class Chamado extends Model
         'prazo',
         'prioridade',
         'data_coleta',
+        'origem_referencia',
     ];
 
     protected function casts(): array
