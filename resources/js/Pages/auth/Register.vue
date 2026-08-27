@@ -81,10 +81,24 @@ import { store } from '@/routes/register';
                     <InputError :message="errors.password_confirmation" />
                 </div>
 
+                <div class="grid gap-2">
+                    <Label for="numero_tecnico">Número de técnico</Label>
+                    <Input
+                        id="numero_tecnico"
+                        type="text"
+                        required
+                        :tabindex="5"
+                        autocomplete="off"
+                        name="numero_tecnico"
+                        placeholder="Ex: 5586999999999"
+                    />
+                    <InputError :message="errors.numero_tecnico" />
+                </div>
+
                 <Button
                     type="submit"
                     class="mt-2 w-full"
-                    tabindex="5"
+                    tabindex="6"
                     :disabled="processing"
                     data-test="register-user-button"
                 >
@@ -98,7 +112,7 @@ import { store } from '@/routes/register';
                 <TextLink
                     :href="login()"
                     class="underline underline-offset-4"
-                    :tabindex="6"
+                    :tabindex="7"
                     >Log in</TextLink
                 >
             </div>

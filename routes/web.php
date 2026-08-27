@@ -14,12 +14,14 @@ use App\Http\Controllers\EquipamentoCreateController;
 use App\Http\Controllers\EquipamentoDeleteController;
 use App\Http\Controllers\EquipamentoListController;
 use App\Http\Controllers\EquipamentoUpdateController;
+use App\Http\Controllers\NumeroVerificationController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDeleteController;
 use App\Http\Controllers\UserListController;
 use App\Http\Controllers\UserRestoreController;
 use App\Http\Controllers\UserUpdateController;
+use App\Http\Controllers\VerificationCodeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -41,7 +43,23 @@ if (Features::enabled(Features::registration())) {
     })->middleware('guest')->name('register');
 }
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware('auth')->group(function () {
+    Route::get('/verify-code', [VerificationCodeController::class, 'show'])->name('verification.notice');
+    Route::post('/verify-code', [VerificationCodeController::class, 'confirmar'])->name('verification.code.confirm');
+    Route::post('/verify-code/resend', [VerificationCodeController::class, 'reenviar'])
+        ->middleware('throttle:6,1')
+        ->name('verification.send');
+
+    Route::middleware('verified')->group(function () {
+        Route::get('/verify-numero', [NumeroVerificationController::class, 'show'])->name('numero.verification.notice');
+        Route::post('/verify-numero', [NumeroVerificationController::class, 'confirmar'])->name('numero.verification.confirm');
+        Route::post('/verify-numero/resend', [NumeroVerificationController::class, 'reenviar'])
+            ->middleware('throttle:6,1')
+            ->name('numero.verification.send');
+    });
+});
+
+Route::middleware(['auth', 'verified', 'numero.verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics');
 

@@ -146,7 +146,10 @@ return [
     'features' => [
         Features::registration(),
         Features::resetPasswords(),
-        Features::emailVerification(),
+        // Verificação de e-mail por CÓDIGO (não link) é implementada à
+        // parte -- ver App\Http\Controllers\VerificationCodeController.
+        // Features::emailVerification() fica desligado de propósito pra
+        // não registrar as rotas de link do Fortify por cima das nossas.
         Features::twoFactorAuthentication([
             'confirm' => true,
             'confirmPassword' => true,

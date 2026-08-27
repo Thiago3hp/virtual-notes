@@ -3,18 +3,25 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
+use App\Support\TecnicoNumeroValidator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * Segundo fator de acesso além de email/senha: o login só passa se o
- * número de técnico informado bater com um dos autorizados em
- * config('tecnicos.numeros_autorizados') (vem só de env, nunca comitado).
+ * Segundo fator de acesso além de email/senha: o login exige um número
+ * de técnico.
+ *
+ * - Enquanto a conta ainda não passou pela verificação completa (e-mail
+ *   + WhatsApp), aceita qualquer número da lista geral autorizada --
+ *   nesse ponto o número ainda não está "vinculado" a ninguém.
+ * - Depois que numero_verified_at é preenchido, a conta só aceita O
+ *   PRÓPRIO número dela. Isso é o que impede duas contas diferentes de
+ *   usarem o mesmo número autorizado depois de um deles já ter
+ *   reivindicado ele.
  *
  * Deliberadamente retorna null (falha genérica, mesma mensagem do
- * Fortify pra credenciais erradas) tanto se o email/senha estiverem
- * errados quanto se o número de técnico não bater -- não dá pra um
- * atacante saber qual das duas coisas falhou.
+ * Fortify pra credenciais erradas) em qualquer caso de falha -- não dá
+ * pra um atacante saber qual das checagens não passou.
  */
 class AuthenticateWithTecnicoNumero
 {
@@ -26,32 +33,20 @@ class AuthenticateWithTecnicoNumero
             return null;
         }
 
-        if (! $this->numeroAutorizado($request->input('numero_tecnico'))) {
+        $numeroInformado = TecnicoNumeroValidator::normalizar($request->input('numero_tecnico'));
+
+        if ($numeroInformado === '') {
+            return null;
+        }
+
+        if ($user->numero_verified_at) {
+            if ($numeroInformado !== TecnicoNumeroValidator::normalizar($user->numero_tecnico)) {
+                return null;
+            }
+        } elseif (! TecnicoNumeroValidator::autorizado($numeroInformado)) {
             return null;
         }
 
         return $user;
-    }
-
-    private function numeroAutorizado(?string $numeroInformado): bool
-    {
-        $numeroInformado = $this->normalizar($numeroInformado);
-
-        if ($numeroInformado === '') {
-            return false;
-        }
-
-        $autorizados = array_map($this->normalizar(...), config('tecnicos.numeros_autorizados', []));
-
-        return in_array($numeroInformado, $autorizados, true);
-    }
-
-    /**
-     * Compara só os dígitos, pra "(86) 99999-9999" e "5586999999999"
-     * baterem mesmo formatados de jeitos diferentes.
-     */
-    private function normalizar(?string $numero): string
-    {
-        return preg_replace('/\D+/', '', (string) $numero) ?? '';
     }
 }
