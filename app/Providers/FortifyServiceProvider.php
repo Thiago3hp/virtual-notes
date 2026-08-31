@@ -76,9 +76,10 @@ class FortifyServiceProvider extends ServiceProvider
             'status' => $request->session()->get('status'),
         ]));
 
-        Fortify::verifyEmailView(fn (Request $request) => Inertia::render('auth/VerifyEmail', [
-            'status' => $request->session()->get('status'),
-        ]));
+        // Verificação por e-mail está desligada (Features::emailVerification()
+        // não é habilitada em config/fortify.php), então não há mais
+        // motivo pra registrar essa view -- ela usava uma rota que não
+        // existe mais (ver routes/web.php).
 
         Fortify::registerView(fn () => Inertia::render('auth/Register'));
 

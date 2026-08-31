@@ -13,8 +13,15 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
 #[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token', 'verification_code', 'numero_verification_code'])]
-class User extends Authenticatable implements MustVerifyEmail
+#[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token', 'numero_verification_code'])]
+// TEMPORARIO (desde 31/08/2026): verificacao de e-mail desligada porque o
+// envio de e-mail estava quebrado (SMTP bloqueado pelo Railway) e o Resend
+// ainda esta sendo configurado. Enquanto o User nao implementa
+// MustVerifyEmail, o middleware 'verified' deixa todo mundo passar --
+// e, em cascata, EnsureNumeroIsVerified tambem libera (ele so bloqueia
+// depois que o e-mail foi confirmado). Pra reativar as duas verificacoes,
+// e so voltar a implementar MustVerifyEmail abaixo.
+class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable, SoftDeletes;

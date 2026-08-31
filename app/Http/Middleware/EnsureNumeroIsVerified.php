@@ -7,9 +7,10 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Mesmo espírito do middleware 'verified' nativo do Laravel, só que pro
- * segundo canal (WhatsApp), não o e-mail. Só deixa passar se
- * numero_verified_at estiver preenchido.
+ * Verificação por segundo canal (WhatsApp). Desde 31/08/2026, essa é a
+ * única verificação obrigatória -- a de e-mail foi retirada do fluxo
+ * (ver routes/web.php). Só deixa passar se numero_verified_at estiver
+ * preenchido.
  */
 class EnsureNumeroIsVerified
 {
@@ -17,13 +18,7 @@ class EnsureNumeroIsVerified
     {
         $user = $request->user();
 
-        if (! $user || ! $user->email_verified_at) {
-            // Se o e-mail nem foi confirmado ainda, deixa o middleware
-            // 'verified' padrão cuidar disso primeiro.
-            return $next($request);
-        }
-
-        if (! $user->numero_verified_at) {
+        if ($user && ! $user->numero_verified_at) {
             return redirect()->route('numero.verification.notice');
         }
 

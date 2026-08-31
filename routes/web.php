@@ -21,7 +21,6 @@ use App\Http\Controllers\UserDeleteController;
 use App\Http\Controllers\UserListController;
 use App\Http\Controllers\UserRestoreController;
 use App\Http\Controllers\UserUpdateController;
-use App\Http\Controllers\VerificationCodeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -43,23 +42,30 @@ if (Features::enabled(Features::registration())) {
     })->middleware('guest')->name('register');
 }
 
-Route::middleware('auth')->group(function () {
-    Route::get('/verify-code', [VerificationCodeController::class, 'show'])->name('verification.notice');
-    Route::post('/verify-code', [VerificationCodeController::class, 'confirmar'])->name('verification.code.confirm');
-    Route::post('/verify-code/resend', [VerificationCodeController::class, 'reenviar'])
-        ->middleware('throttle:6,1')
-        ->name('verification.send');
+// Verificação por e-mail foi retirada do fluxo (31/08/2026) -- o envio de
+// e-mail é um problema à parte (SMTP/Resend) e a prioridade agora é só a
+// verificação de número (WhatsApp). As rotas antigas de /verify-code
+// ficam comentadas aqui, não apagadas, caso o e-mail volte a fazer
+// sentido mais pra frente (ver App\Support\EmailVerificationCode e
+// App\Http\Controllers\VerificationCodeController, que continuam intactos).
+//
+// Route::middleware('auth')->group(function () {
+//     Route::get('/verify-code', [VerificationCodeController::class, 'show'])->name('verification.notice');
+//     Route::post('/verify-code', [VerificationCodeController::class, 'confirmar'])->name('verification.code.confirm');
+//     Route::post('/verify-code/resend', [VerificationCodeController::class, 'reenviar'])
+//         ->middleware('throttle:6,1')
+//         ->name('verification.send');
+// });
 
-    Route::middleware('verified')->group(function () {
-        Route::get('/verify-numero', [NumeroVerificationController::class, 'show'])->name('numero.verification.notice');
-        Route::post('/verify-numero', [NumeroVerificationController::class, 'confirmar'])->name('numero.verification.confirm');
-        Route::post('/verify-numero/resend', [NumeroVerificationController::class, 'reenviar'])
-            ->middleware('throttle:6,1')
-            ->name('numero.verification.send');
-    });
+Route::middleware('auth')->group(function () {
+    Route::get('/verify-numero', [NumeroVerificationController::class, 'show'])->name('numero.verification.notice');
+    Route::post('/verify-numero', [NumeroVerificationController::class, 'confirmar'])->name('numero.verification.confirm');
+    Route::post('/verify-numero/resend', [NumeroVerificationController::class, 'reenviar'])
+        ->middleware('throttle:6,1')
+        ->name('numero.verification.send');
 });
 
-Route::middleware(['auth', 'verified', 'numero.verified'])->group(function () {
+Route::middleware(['auth', 'numero.verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics');
 

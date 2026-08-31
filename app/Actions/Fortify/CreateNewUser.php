@@ -5,7 +5,7 @@ namespace App\Actions\Fortify;
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
 use App\Models\User;
-use App\Support\EmailVerificationCode;
+use App\Support\NumeroVerificationCode;
 use App\Support\TecnicoNumeroValidator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -40,13 +40,13 @@ class CreateNewUser implements CreatesNewUsers
             ]);
         }
 
-        // O número só fica "reservado de vez" quando o e-mail é
-        // verificado pela primeira vez (ver EmailVerificationCode e
-        // VerificationCodeController). Até lá, uma conta cadastrada mas
+        // O número só fica "reservado de vez" quando a verificação por
+        // WhatsApp é confirmada pela primeira vez (ver NumeroVerificationCode
+        // e NumeroVerificationController). Até lá, uma conta cadastrada mas
         // nunca verificada não deve travar esse número pra sempre --
         // por isso a checagem de conflito olha só contas JÁ verificadas.
         $normalizado = TecnicoNumeroValidator::normalizar($numero);
-        $jaVinculado = User::whereNotNull('email_verified_at')
+        $jaVinculado = User::whereNotNull('numero_verified_at')
             ->get()
             ->contains(fn (User $u) => TecnicoNumeroValidator::normalizar($u->numero_tecnico) === $normalizado);
 
@@ -63,10 +63,13 @@ class CreateNewUser implements CreatesNewUsers
         ]);
 
         // Guardado desde já (pendente de confirmação) -- vira permanente
-        // só quando o código de e-mail for confirmado com sucesso.
+        // só quando o código de WhatsApp for confirmado com sucesso.
         $user->forceFill(['numero_tecnico' => $numero])->save();
 
-        EmailVerificationCode::gerarEEnviar($user);
+        // Verificação por e-mail foi retirada do fluxo (31/08/2026) --
+        // vai direto pra verificação de número, que agora é a única
+        // obrigatória.
+        NumeroVerificationCode::gerarEEnfileirar($user);
 
         return $user;
     }
