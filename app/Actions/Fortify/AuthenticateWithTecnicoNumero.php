@@ -43,8 +43,20 @@ class AuthenticateWithTecnicoNumero
             if ($numeroInformado !== TecnicoNumeroValidator::normalizar($user->numero_tecnico)) {
                 return null;
             }
-        } elseif (! TecnicoNumeroValidator::autorizado($numeroInformado)) {
-            return null;
+        } else {
+            if (! TecnicoNumeroValidator::autorizado($numeroInformado)) {
+                return null;
+            }
+
+            // Enquanto não está verificado, o número ainda não está
+            // "reivindicado" -- mantém numero_tecnico sempre igual ao que
+            // a pessoa digitou agora no login. Sem isso, se o valor salvo
+            // no cadastro estiver vazio/desatualizado, a verificação por
+            // WhatsApp tenta enviar pra um número vazio (ver
+            // NumeroVerificationCode::gerarEEnfileirar).
+            if (TecnicoNumeroValidator::normalizar($user->numero_tecnico) !== $numeroInformado) {
+                $user->forceFill(['numero_tecnico' => $numeroInformado])->save();
+            }
         }
 
         return $user;

@@ -19,7 +19,11 @@ class NumeroVerificationController extends Controller
         // Se ainda não tem nenhum código pendente (ex: acabou de sair do
         // passo do e-mail), gera e enfileira agora.
         if (! $user->numero_verification_code) {
-            NumeroVerificationCode::gerarEEnfileirar($user);
+            if (! NumeroVerificationCode::gerarEEnfileirar($user)) {
+                return back()->withErrors([
+                    'code' => 'Não conseguimos identificar seu número de técnico. Saia e entre novamente informando o número.',
+                ]);
+            }
         }
 
         return Inertia::render('auth/VerifyNumeroCode', [
@@ -50,7 +54,11 @@ class NumeroVerificationController extends Controller
             return redirect()->route('dashboard');
         }
 
-        NumeroVerificationCode::gerarEEnfileirar($user);
+        if (! NumeroVerificationCode::gerarEEnfileirar($user)) {
+            return back()->withErrors([
+                'code' => 'Não conseguimos identificar seu número de técnico. Saia e entre novamente informando o número.',
+            ]);
+        }
 
         return back()->with('success', 'Um novo código foi enviado pro seu WhatsApp.');
     }

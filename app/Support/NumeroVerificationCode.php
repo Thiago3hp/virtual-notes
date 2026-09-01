@@ -9,8 +9,20 @@ class NumeroVerificationCode
 {
     private const MINUTOS_VALIDADE = 15;
 
-    public static function gerarEEnfileirar(User $user): void
+    /**
+     * Retorna false (sem gerar nada) se o usuário não tem um numero_tecnico
+     * válido salvo -- evita colocar uma mensagem com número vazio na fila
+     * whatsapp_outbox (o bot rejeita e marca como falhou de qualquer
+     * forma, mas é melhor nem chegar a isso).
+     */
+    public static function gerarEEnfileirar(User $user): bool
     {
+        $numero = TecnicoNumeroValidator::normalizar($user->numero_tecnico);
+
+        if ($numero === '') {
+            return false;
+        }
+
         $codigo = (string) random_int(100000, 999999);
 
         $user->forceFill([
@@ -19,10 +31,12 @@ class NumeroVerificationCode
         ])->save();
 
         WhatsappOutboxMessage::create([
-            'numero' => TecnicoNumeroValidator::normalizar($user->numero_tecnico),
+            'numero' => $numero,
             'mensagem' => "Seu código de verificação do Virtual Notes é: {$codigo}\n\nEle expira em 15 minutos. Se você não solicitou isso, ignore essa mensagem.",
             'status' => 'pendente',
         ]);
+
+        return true;
     }
 
     public static function confirmar(User $user, ?string $codigoInformado): bool
