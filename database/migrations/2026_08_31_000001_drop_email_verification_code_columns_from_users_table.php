@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Schema;
  * routes/web.php, CreateNewUser e EnsureNumeroIsVerified). Nada no
  * código escreve ou lê essas colunas hoje.
  *
- * Mantive email_verified_at de propósito -- é uma coluna padrão do
- * Laravel, usada por outras partes do framework (Fortify, etc.), então é
- * mais seguro deixá-la aí sem uso do que removê-la.
+.
  */
 return new class extends Migration
 {
