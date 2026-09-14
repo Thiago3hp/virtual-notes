@@ -25,8 +25,8 @@ class ChamadoResource extends JsonResource
             'tecnico_nome' => $this->tecnico_nome,
             'laudo_tecnico' => $this->laudo_tecnico,
             'avaliacao' => $this->avaliacao,
-            'criado_em' => $this->criado_em?->toDateTimeString(),
-            'fechado_em' => $this->fechado_em?->toDateTimeString(),
+            'criado_em' => $this->criado_em?->timezone('America/Sao_Paulo')->toDateTimeString(),
+            'fechado_em' => $this->fechado_em?->timezone('America/Sao_Paulo')->toDateTimeString(),
         ];
     }
 }
